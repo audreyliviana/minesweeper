@@ -168,6 +168,7 @@ class MinesweeperAI():
         self.mines.add(cell)
         for sentence in self.knowledge:
             sentence.mark_mine(cell)
+            sentence.count -= 1
 
     def mark_safe(self, cell):
         """
@@ -202,8 +203,11 @@ class MinesweeperAI():
                 if (i, j) == cell:
                     continue
                 if i in range(self.height) and j in range(self.width):
-                    if (i, j) not in self.safes and (i, j) not in self.mines:
-                        neighbors.add((i, j))
+                    if (i, j) not in self.safes:
+                        if (i, j) not in self.mines:
+                            neighbors.add((i, j))
+                        else:
+                            count -= 1
         # add new sentence to the knowledge
         new_sentence = Sentence(neighbors, count)
         self.knowledge.append(new_sentence)
@@ -218,6 +222,9 @@ class MinesweeperAI():
         made_inference = True
         while made_inference:
             made_inference = False
+            
+            # remove empty sentences
+            self.knowledge = [sentence for sentence in self.knowledge if len(sentence.cells) > 0]
 
             # determines cells known to be safe or mines
             all_safes, all_mines = set(), set()
@@ -234,9 +241,6 @@ class MinesweeperAI():
                 for cell in all_mines:
                     self.mark_mine(cell)
             
-            # remove empty sentences
-            self.knowledge = [sentence for sentence in self.knowledge if len(sentence.cells) > 0]
-
             # infer new sentence from existing knowledge
             new_sentences = []
             for sentence1 in self.knowledge:
