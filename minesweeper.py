@@ -222,9 +222,6 @@ class MinesweeperAI():
         made_inference = True
         while made_inference:
             made_inference = False
-            
-            # remove empty sentences
-            self.knowledge = [sentence for sentence in self.knowledge if len(sentence.cells) > 0]
 
             # determines cells known to be safe or mines
             all_safes, all_mines = set(), set()
@@ -233,13 +230,16 @@ class MinesweeperAI():
                 all_mines.update(sentence.known_mines())
             
             if all_safes:
-                made_inference = True
+                # made_inference = True
                 for cell in all_safes:
                     self.mark_safe(cell)
             if all_mines:
-                made_inference = True
+                # made_inference = True
                 for cell in all_mines:
                     self.mark_mine(cell)
+            
+            # remove empty sentences
+            self.knowledge = [sentence for sentence in self.knowledge if len(sentence.cells) > 0]
             
             # infer new sentence from existing knowledge
             new_sentences = []
