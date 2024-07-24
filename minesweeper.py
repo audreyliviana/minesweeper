@@ -168,7 +168,6 @@ class MinesweeperAI():
         self.mines.add(cell)
         for sentence in self.knowledge:
             sentence.mark_mine(cell)
-            sentence.count -= 1
 
     def mark_safe(self, cell):
         """
