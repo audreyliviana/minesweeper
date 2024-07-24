@@ -107,12 +107,16 @@ class Sentence():
         """
         Returns the set of all cells in self.cells known to be mines.
         """
+        if self.count == len(self.cells):
+            self.mines = self.cells.copy()
         return self.mines
 
     def known_safes(self):
         """
         Returns the set of all cells in self.cells known to be safe.
         """
+        if self.count == 0:
+            self.safe = self.cells.copy()
         return self.safe
 
     def mark_mine(self, cell):
@@ -123,6 +127,7 @@ class Sentence():
         if cell in self.cells:
             self.mines.add(cell)
             self.cells.remove(cell)
+            self.count -= 1
 
     def mark_safe(self, cell):
         """
